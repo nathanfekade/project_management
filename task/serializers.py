@@ -67,3 +67,20 @@ class CategorySerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+
+class AddTasksToCategoryByTitleSerializer(serializers.Serializer):
+    task_titles = serializers.SlugRelatedField(
+        many=True,
+        queryset=Task.objects.none(),
+        slug_field='title',
+        required=True,
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        user = self.context.get("user")
+        if user:
+            tasks = Task.objects.filter(user=user)
+            self.fields["task_titles"].queryset = tasks
+            self.fields["task_titles"].child_relation.queryset = tasks
