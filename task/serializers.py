@@ -37,8 +37,8 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ['title', 'user', 'tasks']
-        read_only_fields = ('user',)
+        fields = ['id','title', 'user', 'tasks']
+        read_only_fields = ('id','user')
 
     def get_tasks(self, obj):
         tasks_instances = obj.tasks.all()
